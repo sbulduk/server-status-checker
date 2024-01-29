@@ -43,7 +43,7 @@ class VM(IVM):
 		elif operation=="restart":
 			self.Restart()
 		else:
-			return -1
+			return None
 		
 	def PowerOn(self):
 		pass
