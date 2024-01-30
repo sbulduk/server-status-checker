@@ -6,9 +6,29 @@ class IVM(ABC):
 		pass
 
 	@abstractmethod
-	def CloseConnection(self):
+	def GetVirtualMachineList(self):
 		pass
 
 	@abstractmethod
-	def PerformOperation(self,operation:str):
+	def SelectVirtualMachine(self):
+		pass
+
+	@abstractmethod
+	def ShowStatus(self,virtualMachine):
+		pass
+
+	@abstractmethod
+	def PowerOn(self,virtualMachine):
+		pass
+
+	@abstractmethod
+	def PowerOff(self,virtualMachine):
+		pass
+
+	@abstractmethod
+	def Restart(self,virtualMachine):
+		pass
+
+	@abstractmethod
+	def CloseConnection(self):
 		pass
