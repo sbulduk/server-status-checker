@@ -7,14 +7,14 @@ from pyVmomi import vmodl,vim
 class VM(IVM):
 	def __init__(self):
 		super().__init__()
-		self.host,self.username,self.password=Credentials.GetCredentials()
-	
-	def Connect(self):
 		context=ssl.SSLContext(ssl.PROTOCOL_SSLv23)
 		context.verify_mode=ssl.CERT_NONE
-
+		self.host,self.username,self.password=Credentials.GetCredentials()
+		self.vmServiceInstance=connect.SmartConnect(host=self.host,user=self.username,pwd=self.password,sslContext=context)
+	
+	def Connect(self):
 		try:
-			vmServiceInstance=connect.SmartConnect(host=self.host,user=self.username,pwd=self.password,sslContext=context)
+			vmServiceInstance=self.vmServiceInstance
 			print("ESXi Connection Established Successfully!")
 			return vmServiceInstance
 		except vmodl.MethodFault as error:
@@ -46,7 +46,7 @@ class VM(IVM):
 			print("No VM's found!")
 			return None
 		if len(virtualMachineList)==1:
-			print(f"Only one VM is available: {virtualMachine[0].name} - ({virtualMachineList[0]}) which is automatically selected!")
+			print(f"Only one VM is available: {virtualMachineList[0].name} - ({virtualMachineList[0]}) which is automatically selected!")
 			return virtualMachineList[0]
 		
 		print(f"Available VM instances:")
@@ -102,4 +102,4 @@ class VM(IVM):
 		connect.Disconnect(serviceInstance)
 
 	def __del__(self):
-		self.CloseConnection()
+		self.CloseConnection(self.vmServiceInstance)
